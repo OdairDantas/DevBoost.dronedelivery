@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevBoost.DroneDelivery.Api", "DevBoost.DroneDelivery.API\DevBoost.DroneDelivery.Api.csproj", "{3FBCE441-E2E4-4FD5-8279-B1C83E8B598E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 - Presentetion", "0 - Presentetion", "{385EFFC2-5457-499D-AB40-8B5F9A6AAFDF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Application", "1 - Application", "{75DA4501-589C-47BD-BE12-974821A9B640}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Domain", "2 - Domain", "{DB76BB26-58B1-4CCF-9BFC-52FF8D6A6AD7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Infrastructure", "3 - Infrastructure", "{52A3EEAF-CF67-452C-820E-8E2FB9EA6481}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevBoost.DroneDelivery.Domain", "DevBoost.DroneDelivery.Domain\DevBoost.DroneDelivery.Domain.csproj", "{E20A0CD5-09BE-4B8F-AAB3-8730309261A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevBoost.DroneDelivery.Application", "DevBoost.DroneDelivery.Application\DevBoost.DroneDelivery.Application.csproj", "{96A19475-E4A4-4290-9C58-5D802AB47047}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevBoost.DroneDelivery.Infrastructure", "DevBoost.DroneDelivery.Infrastructure\DevBoost.DroneDelivery.Infrastructure.csproj", "{620E02C7-3CBD-4D21-839D-C7AB595277F4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3FBCE441-E2E4-4FD5-8279-B1C83E8B598E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FBCE441-E2E4-4FD5-8279-B1C83E8B598E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FBCE441-E2E4-4FD5-8279-B1C83E8B598E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FBCE441-E2E4-4FD5-8279-B1C83E8B598E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E20A0CD5-09BE-4B8F-AAB3-8730309261A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E20A0CD5-09BE-4B8F-AAB3-8730309261A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E20A0CD5-09BE-4B8F-AAB3-8730309261A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E20A0CD5-09BE-4B8F-AAB3-8730309261A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96A19475-E4A4-4290-9C58-5D802AB47047}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96A19475-E4A4-4290-9C58-5D802AB47047}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96A19475-E4A4-4290-9C58-5D802AB47047}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96A19475-E4A4-4290-9C58-5D802AB47047}.Release|Any CPU.Build.0 = Release|Any CPU
+		{620E02C7-3CBD-4D21-839D-C7AB595277F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{620E02C7-3CBD-4D21-839D-C7AB595277F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{620E02C7-3CBD-4D21-839D-C7AB595277F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{620E02C7-3CBD-4D21-839D-C7AB595277F4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3FBCE441-E2E4-4FD5-8279-B1C83E8B598E} = {385EFFC2-5457-499D-AB40-8B5F9A6AAFDF}
+		{E20A0CD5-09BE-4B8F-AAB3-8730309261A5} = {DB76BB26-58B1-4CCF-9BFC-52FF8D6A6AD7}
+		{96A19475-E4A4-4290-9C58-5D802AB47047} = {75DA4501-589C-47BD-BE12-974821A9B640}
+		{620E02C7-3CBD-4D21-839D-C7AB595277F4} = {52A3EEAF-CF67-452C-820E-8E2FB9EA6481}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E631AD36-6ABF-4B5C-B7A1-C65703E11C4B}
+	EndGlobalSection
+EndGlobal
