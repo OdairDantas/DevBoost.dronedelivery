@@ -18,19 +18,18 @@ namespace DevBoost.DroneDelivery.Application.Services
 
         private readonly IUnitOfWork _unitOfWork;
         private IMediatrHandler _bus;
-        private IDroneService _droneService;
-        public PedidoService(IDroneService droneService, IUnitOfWork unitOfWork, IMediatrHandler bus)
+        public PedidoService(IUnitOfWork unitOfWork, IMediatrHandler bus)
         {
             _unitOfWork = unitOfWork;
             _bus = bus;
-            _droneService = droneService;
         }
 
         public async Task<Pedido> Criar(Pedido pedido)
         {
             await _unitOfWork.Pedidos.InsertAsync(pedido);
             await _unitOfWork.SaveAsync();
-            await CheckOut();
+            await _bus.PublicarEvento(new SolicitarEntregaEvent(pedido.Id));
+            
 
             return pedido;
         }
@@ -76,45 +75,6 @@ namespace DevBoost.DroneDelivery.Application.Services
                 return false;
 
             return true;
-        }
-
-
-        public async Task CheckOut()
-        {
-            var pedidos = await Task.FromResult(ObterTodos().Result.ToList());
-            var dronesDisponiveis = await Task.FromResult(_unitOfWork.DroneItinerario.GetAllAsync().Result?.ToList().Where(x => x.StatusDrone == EStatusDrone.Disponivel));
-            
-            var entregas = new List<Entrega>();
-
-            foreach (var item in dronesDisponiveis)
-            {
-                var drone = await Task.FromResult(_unitOfWork.Drone.GetAllAsync().Result.ToList().FirstOrDefault(x=>x.Id== item.DroneId));
-                var listaCheckout = pedidos.Where(p => p.Peso <= drone.Capacidade);
-                listaCheckout = listaCheckout?.Where(p=> drone.AutonomiaRestante >= new Localizacao() { Latitude = (double)p.Latitude, Longitude = (double)p.Longitude }.CalcularDistanciaEmKilometros() * 2);
-                
-                foreach (var checkout in listaCheckout)
-                {
-                    var tempoPercurso = Convert.ToInt32(new Localizacao() { Latitude = (double)checkout.Latitude, Longitude = (double)checkout.Longitude }.CalcularDistanciaEmKilometros() * 2);
-
-                    if ((drone.Capacidade >= checkout.Peso) && (drone.AutonomiaRestante >= tempoPercurso))
-                    {
-                        entregas.Add(new Entrega() { PedidoId = checkout.Id, DroneId = drone.Id, DataPrevisao = DateTime.Now.AddMinutes(tempoPercurso / 2) });
-                        drone.Capacidade -= checkout.Peso;
-                        drone.AutonomiaRestante -= tempoPercurso;
-                    }
-                    else
-                    {
-                        break;
-
-                    }
-                }
-
-            }
-            if (entregas.Any())
-            {
-                await _unitOfWork.Entrega.InsertCollectionAsync(entregas);
-                await _unitOfWork.SaveAsync();
-            }
         }
     }
 }

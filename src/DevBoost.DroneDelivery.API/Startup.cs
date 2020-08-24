@@ -30,9 +30,10 @@ namespace DevBoost.DroneDelivery.Api
         {
             services.AddControllers();
             services.AddMediatR(typeof(Startup));
+            var assembly = AppDomain.CurrentDomain.Load("DevBoost.DroneDelivery.Application");
+            services.AddMediatR(assembly);
             services.AddTransient<IMediatrHandler, MediatrHandler>();
             services.AddSwaggerGen(c => c.SwaggerDoc(name: "v1", new OpenApiInfo { Title = "Drone Delivery", Version = "v1" }));
-
             services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
             services.AddTransient<IPedidoRepository, PedidoRepository>();
             services.AddTransient<IDroneRepository,DroneRepository>();

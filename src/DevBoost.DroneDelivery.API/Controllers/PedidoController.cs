@@ -12,6 +12,7 @@ using DevBoost.DroneDelivery.Application.Extensions;
 using DevBoost.DroneDelivery.Application.Events;
 using MediatR;
 using DevBoost.DroneDelivery.Domain.Interfaces.Handles;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DevBoost.DroneDelivery.Api.Controllers
 {
@@ -47,6 +48,7 @@ namespace DevBoost.DroneDelivery.Api.Controllers
             return pedido;
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPedido(Guid id, Pedido pedido)
         {
@@ -91,6 +93,7 @@ namespace DevBoost.DroneDelivery.Api.Controllers
             return CreatedAtAction("GetPedido", new { id = noovoPedido.Id }, noovoPedido);
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Pedido>> DeletePedido(Guid id)
         {
