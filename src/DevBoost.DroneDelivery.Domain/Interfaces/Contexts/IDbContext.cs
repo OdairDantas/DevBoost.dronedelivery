@@ -1,14 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DevBoost.DroneDelivery.Domain.Interfaces.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Threading.Tasks;
 
 namespace DevBoost.DroneDelivery.Domain.Interfaces.Contexts
 {
-    public interface IDbContext:IDisposable
+    public interface IDbContext : IUnitOfWork,IDisposable
     {
-
         DbSet<T> Set<T>() where T : class;
 
-        Task<int> SaveChangesAsync();
     }
 }

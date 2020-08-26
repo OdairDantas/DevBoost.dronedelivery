@@ -1,9 +1,11 @@
-﻿using DevBoost.DroneDelivery.Application.Events;
+﻿using DevBoost.DroneDelivery.Application.Commands;
+using DevBoost.DroneDelivery.Application.Events;
 using DevBoost.DroneDelivery.Application.Extensions;
+using DevBoost.DroneDelivery.Application.Queries;
 using DevBoost.DroneDelivery.Domain.Entities;
 using DevBoost.DroneDelivery.Domain.Enumerators;
+using DevBoost.DroneDelivery.Domain.Interfaces.Handles;
 using DevBoost.DroneDelivery.Domain.Interfaces.Repositories;
-using DevBoost.DroneDelivery.Domain.Interfaces.Services;
 using DevBoost.DroneDelivery.Domain.ValueObjects;
 using MediatR;
 using System;
@@ -16,31 +18,34 @@ namespace DevBoost.DroneDelivery.Application.Handles
 {
     public class EntregaHandler : INotificationHandler<SolicitarEntregaEvent>
     {
-        private IUnitOfWork _unitOfWork;
-        private IPedidoService _pedidoService;
+        private IDroneRepository _droneRepository;
+        private IPedidoQueries _pedidoQueries;
+        private IDroneQueries _droneQueries;
+        private IMediatrHandler _bus;
 
-        public EntregaHandler(IUnitOfWork unitOfWork, IPedidoService pedidoService)
+        public EntregaHandler(IDroneRepository droneRepository, IPedidoQueries pedidoQueries, IDroneQueries droneQueries, IMediatrHandler bus)
         {
-            _unitOfWork = unitOfWork;
-            _pedidoService = pedidoService;
+            _droneRepository = droneRepository;
+            _pedidoQueries = pedidoQueries;
+            _droneQueries = droneQueries;
+            _bus = bus;
         }
 
         public async Task Handle(SolicitarEntregaEvent messagem, CancellationToken cancellationToken)
         {
 
-            //TODO: Executar entraga...
             await CheckOut();
         }
         public async Task CheckOut()
         {
-            var pedidos = await Task.FromResult(_pedidoService.ObterTodos().Result.ToList());
-            var dronesDisponiveis = await Task.FromResult(_unitOfWork.DroneItinerario.GetAllAsync().Result?.ToList().Where(x => x.StatusDrone == EStatusDrone.Disponivel));
+            var pedidos = await _pedidoQueries.ObterPedidosAguardandoEntregador();
 
             var entregas = new List<Entrega>();
 
-            foreach (var item in dronesDisponiveis)
+            foreach (var item in pedidos)
             {
-                var drone = await Task.FromResult(_unitOfWork.Drone.GetAllAsync().Result.ToList().FirstOrDefault(x => x.Id == item.DroneId));
+                var drone = await _droneQueries.ObterDroneDisponiveil();
+
                 var listaCheckout = pedidos.Where(p => p.Peso <= drone.Capacidade);
                 listaCheckout = listaCheckout?.Where(p => drone.AutonomiaRestante >= new Localizacao() { Latitude = (double)p.Latitude, Longitude = (double)p.Longitude }.CalcularDistanciaEmKilometros() * 2);
 
@@ -51,8 +56,15 @@ namespace DevBoost.DroneDelivery.Application.Handles
                     if ((drone.Capacidade >= checkout.Peso) && (drone.AutonomiaRestante >= tempoPercurso))
                     {
                         entregas.Add(new Entrega() { PedidoId = checkout.Id, DroneId = drone.Id, DataPrevisao = DateTime.Now.AddMinutes(tempoPercurso / 2) });
-                        drone.Capacidade -= checkout.Peso;
-                        drone.AutonomiaRestante -= tempoPercurso;
+
+                        var command = new EntregarPedidoCommand(dataPrevisao: DateTime.Now.AddMinutes(tempoPercurso / 2), checkout.Id, statusDrone: EStatusDrone.EmTransito, statusPedido: EStatusPedido.EmTransito);
+                        var saiuParaEntrega = await _bus.EnviarComando(command);
+                        if (saiuParaEntrega)
+                        {
+                            drone.Capacidade -= checkout.Peso;
+                            drone.AutonomiaRestante -= tempoPercurso;
+
+                        }
                     }
                     else
                     {
@@ -61,12 +73,12 @@ namespace DevBoost.DroneDelivery.Application.Handles
                     }
                 }
 
+                var droneAlterado = await _droneRepository.GetByIdAsync(drone.Id);
+                droneAlterado.AutonomiaRestante = drone.AutonomiaRestante;
+                await _droneRepository.UpdateAsync(droneAlterado);
+
             }
-            if (entregas.Any())
-            {
-                await _unitOfWork.Entrega.InsertCollectionAsync(entregas);
-                await _unitOfWork.SaveAsync();
-            }
+            
         }
     }
 

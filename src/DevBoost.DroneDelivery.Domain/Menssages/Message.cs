@@ -4,12 +4,12 @@ using System.Text;
 
 namespace DevBoost.DroneDelivery.Domain.Menssages
 {
-    public abstract class Menssage
+    public abstract class Message
     {
         public string MessageType { get; protected set; }
         public Guid Id { get; set; }
 
-        protected Menssage()
+        protected Message()
         {
             MessageType = GetType().Name;
         }

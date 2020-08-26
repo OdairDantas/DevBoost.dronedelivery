@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DevBoost.DroneDelivery.Domain.Menssages
 {
-    public abstract class Event : Menssage, INotification
+    public abstract class Event : Message, INotification
     {
         protected Event(Guid entityId)
         {
