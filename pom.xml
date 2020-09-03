@@ -1,0 +1,5 @@
+<propriedades>
+  <sonar.projectKey> OdairDantas_DevBoost.dronedelivery.OdairDantas </sonar.projectKey>
+  <sonar.organization> odairdantas </sonar.organization>
+  <sonar.host.url> https://sonarcloud.io </sonar.host.url>
+</properties>
