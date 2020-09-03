@@ -39,5 +39,5 @@ jobs:
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"OdairDantas_DevBoost.dronedelivery.OdairDantas" /o:"odairdantas" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-           dotnet build ".\DevBoost.dronedelivery.OdairDantas\src\DevBoost.DroneDelivery.sln"
+           dotnet build ".\src\DevBoost.DroneDelivery.sln"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
